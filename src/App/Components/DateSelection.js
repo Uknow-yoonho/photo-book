@@ -1,42 +1,78 @@
 import 'date-fns';
 import React from 'react';
 import DateFnsUtils from '@date-io/date-fns';
+import { withStyles } from '@material-ui/core/styles';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
+  DatePicker
 } from '@material-ui/pickers';
 import moment from 'moment'
+import { inject, observer } from 'mobx-react'
+import { IconButton, Typography } from '@material-ui/core'
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
+const customStyle = theme => ({
+  root: {
+    display: 'flex'
+  },
+  date: {
+    color: '#000000',
+    fontSize : 25,
+    margin : 10
+  },
+  icon : {
+    padding: 5,
+  },
+  iconInner : {
+    width : 28,
+    height : 28,
+  }
+})
+
+@inject('filterStore')
+@observer
 class DateSelection extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      selectedDate : new Date()
-    }
+
+  nextDay() { 
+    const {filterStore} = this.props
+    filterStore.nextDay()
+  }
+  nextMonth() { 
+    const {filterStore} = this.props
+    filterStore.nextMonth()
+  }
+  prevDay() { 
+    const {filterStore} = this.props
+    filterStore.prevDay()
+  }
+  prevMonth() { 
+    const {filterStore} = this.props
+    filterStore.prevMonth()
   }
 
-  handleDateChange = date => {
-    this.setState({selectedDate : date});
-  };
   render() {
-    const { selectedDate } = this.state
-    console.log(moment(selectedDate).valueOf())
-    console.log(moment().valueOf())
+    const { filterStore, classes } = this.props
+    const { filter } = filterStore
+    //console.log(filter.date)
     return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <KeyboardDatePicker
-          margin="normal"
-          id="date-picker-dialog"
-          format="MM - dd - yyyy"
-          value={selectedDate}
-          onChange={(date) => this.handleDateChange(date)}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-      </MuiPickersUtilsProvider>
+      <div className={classes.root}>
+        <IconButton onClick={() => this.prevMonth()}  className={classes.icon} >
+        <FirstPageIcon className = {classes.iconInner} /></IconButton>
+        <IconButton onClick={() => this.prevDay()}  className={classes.icon} >
+        <NavigateBeforeIcon className = {classes.iconInner} /></IconButton>
+        <Typography className={classes.date}>{moment(filter.date).format('YYYY/MM/DD')}</Typography>
+        <IconButton onClick={() => this.nextDay()}  className={classes.icon} >
+        <NavigateNextIcon className = {classes.iconInner} /></IconButton>
+        <IconButton onClick={() => this.nextMonth()}  className={classes.icon} >
+        <LastPageIcon className = {classes.iconInner} /></IconButton>
+        
+      </div>
     )
   }
 }
 
-export default DateSelection
+export default withStyles(customStyle)(DateSelection)
