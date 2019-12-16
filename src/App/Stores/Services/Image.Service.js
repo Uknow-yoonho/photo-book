@@ -10,9 +10,9 @@ export default class ImageService {
         downImages.push(data.location[0].location)
         createdAtFile.push(data.createdAtFile)
     })
-    imageObj.viewImages = viewImages
-    imageObj.downImages = downImages
-    imageObj.createdAtFile = createdAtFile
+    imageObj.viewImages = viewImages//.reverse()
+    imageObj.downImages = downImages//.reverse()
+    imageObj.createdAtFile = createdAtFile//.reverse()
     imageObj.length = viewImages.length
     //console.log(imageObj)
     return imageObj

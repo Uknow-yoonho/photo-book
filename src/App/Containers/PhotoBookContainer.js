@@ -3,13 +3,21 @@ import { withStyles } from '@material-ui/core/styles'
 import { PBContainer } from './styled'
 import { Redirect } from 'react-router-dom';
 import PhotoFeed from '../Components/PhotoFeed'
+import Info from '../Components/Info'
 import { inject, observer } from 'mobx-react'
 
 const customStyle = theme => ({
-
+  root : {
+    height : '100vh',
+    overflow: 'auto',
+  },
+  info : {
+    display:'flex', justifyContent:'center',
+    padding: 10,
+  }
 })
 
-@inject('filterStore', 'imageStore')
+@inject('filterStore', 'imageStore', 'bookStore')
 @observer
 class PhotoBookContainer extends React.Component {
 
@@ -24,7 +32,6 @@ class PhotoBookContainer extends React.Component {
     const { filterStore, imageStore } = this.props
     const { filter } = filterStore
     filter.dispCam.map((cam, idx) => {
-      console.log(cam, idx)
       filterStore.getImageDatas(
         filter.cameraNames[idx], filter.date
         )
@@ -40,16 +47,26 @@ class PhotoBookContainer extends React.Component {
 
 
   render() {
-    const { filterStore, imageStore } = this.props
+    const { filterStore, imageStore, classes, bookStore } = this.props
     const { filter } = filterStore
     const { image } = imageStore
+    const activeStep = bookStore.book.currentPage
     return (
-      <PBContainer>
-        {filter.dispCam[0] && <PhotoFeed imageData={image.image1} />}
-        {filter.dispCam[1] && <PhotoFeed imageData={image.image2} />}
-        {filter.dispCam[2] && <PhotoFeed imageData={image.image3} />}
-        {filter.dispCam[3] && <PhotoFeed imageData={image.image4} />}
-        {filter.dispCam[4] && <PhotoFeed imageData={image.image5} />}
+      <PBContainer className={classes.root}>
+        <div className={classes.info}>
+          <Info />
+        </div>
+        {filter.dispCam[0] && 
+        <PhotoFeed imageData={image.image1} activeStep={activeStep} idx={0} />}
+        {filter.dispCam[1] && 
+        <PhotoFeed imageData={image.image2} activeStep={activeStep} idx={1} />}
+        {filter.dispCam[2] && 
+        <PhotoFeed imageData={image.image3} activeStep={activeStep} idx={2} />}
+        {filter.dispCam[3] && 
+        <PhotoFeed imageData={image.image4} activeStep={activeStep} idx={3} />}
+        {filter.dispCam[4] && 
+        <PhotoFeed imageData={image.image5} activeStep={activeStep} idx={4} />}
+        <div style={{height:100}}/>
       </PBContainer>
     )
   }

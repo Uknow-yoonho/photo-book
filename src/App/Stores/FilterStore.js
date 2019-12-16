@@ -9,7 +9,7 @@ export class FilterStore {
 
   constructor() {
     this.filter = {
-      date : moment(new Date("2019/12/06")).valueOf(),
+      date : moment(new Date()).valueOf(),
       dispCam : [true,true,true,true,true],
       cameraNames : ["PTZ1","PTZ2","PTZ3","PTZ4","WIDE1"],
       datePeriod : 1

@@ -31,6 +31,6 @@ export const CTypography = styled(props => <Typography {...props} />)`
 `
 
 export const PBContainer = styled.div`
-
-
+  &&{
+  }
 `

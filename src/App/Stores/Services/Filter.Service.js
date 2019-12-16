@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 const EndPoint = `${process.env.REACT_APP_IMAGE_API_ENDPOINT}`
 const endPoint = "https://apis.iocrops.com/io006/vision-image"
@@ -7,8 +7,8 @@ export default class FilterService {
     
     static async getImageDatas (cameraNames, date) {
       //console.log(cameraNames, date)
-      const startDate = date - (date % 86400000) - ((60 * 60 * 9) * 1000)
-      const endDate = startDate + 86400000
+      const startDate = (date - (date % 86400000)) - (60*60*1000)
+      const endDate = startDate + 86400000 - (60*60*1000)
       console.log(startDate, endDate)
       try{
           return await Axios.get(`${endPoint}/${cameraNames}/${startDate}/${endDate}`, {
@@ -41,9 +41,9 @@ export default class FilterService {
             downImages.push(data.location[0].location)
             createdAtFile.push(data.createdAtFile)
         })
-        imageObj.viewImages = viewImages
-        imageObj.downImages = downImages
-        imageObj.createdAtFile = createdAtFile
+        imageObj.viewImages = viewImages.reverse()
+        imageObj.downImages = downImages.reverse()
+        imageObj.createdAtFile = createdAtFile.reverse()
         imageObj.length = viewImages.length
         return imageObj
     }
