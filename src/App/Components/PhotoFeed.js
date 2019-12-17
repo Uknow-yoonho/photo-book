@@ -12,7 +12,7 @@ const customStyle = theme => ({
     display:'flex', justifyContent:'center'
   },
   feed : {
-    margin:30, 
+    margin: 15, 
     width: isMobile? '100vw' : 640
   },
   img: {

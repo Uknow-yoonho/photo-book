@@ -15,6 +15,7 @@ import moment from 'moment'
 class CustomCalendar extends React.Component {
 
   handleDateChange = (date) => {
+    //console.log(date)
     const { filterStore } = this.props
     filterStore.filter.date = date
     this.props.handleClose()

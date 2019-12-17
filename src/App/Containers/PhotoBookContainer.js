@@ -12,12 +12,12 @@ const customStyle = theme => ({
     overflow: 'auto',
   },
   info : {
-    display:'flex', justifyContent:'center',
-    padding: 10,
+    textAlign: 'center',
+    padding: 5,
   }
 })
 
-@inject('filterStore', 'imageStore', 'bookStore')
+@inject('filterStore', 'imageStore', 'bookStore', 'authStore')
 @observer
 class PhotoBookContainer extends React.Component {
 
@@ -42,7 +42,6 @@ class PhotoBookContainer extends React.Component {
         console.error(err)
       })
     })
-    //ilterStore.getImageDatas()
   }
 
 
@@ -51,6 +50,13 @@ class PhotoBookContainer extends React.Component {
     const { filter } = filterStore
     const { image } = imageStore
     const activeStep = bookStore.book.currentPage
+    const { authStore } = this.props
+    const { auth } = authStore
+
+    if (!auth.isAuth) { 
+      return <Redirect to={'/'} />;
+    }
+
     return (
       <PBContainer className={classes.root}>
         <div className={classes.info}>
@@ -66,7 +72,7 @@ class PhotoBookContainer extends React.Component {
         <PhotoFeed imageData={image.image4} activeStep={activeStep} idx={3} />}
         {filter.dispCam[4] && 
         <PhotoFeed imageData={image.image5} activeStep={activeStep} idx={4} />}
-        <div style={{height:100}}/>
+        <div style={{height:150}}/>
       </PBContainer>
     )
   }

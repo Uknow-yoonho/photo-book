@@ -8,9 +8,11 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import {LogoIcon} from '../Components/DigilogLogo'
 import { isMobile } from 'mobile-device-detect';
 import CustomCalendar from '../Components/CustomCalendar'
+import { inject, observer } from 'mobx-react'
 
 const PhotoBookContainer = lazy(() => import("./PhotoBookContainer"));
 const FilterContainer = lazy(() => import("./FilterContainer"));
+const SignInContainer = lazy(() => import("./SignInContainer"));
 
 const customStyle = theme => ({
     toolbar : {
@@ -33,7 +35,8 @@ const customStyle = theme => ({
     },
 })
 
-
+@inject('authStore')
+@observer
 class CommonContainer extends React.Component {
 
   constructor(props){
@@ -50,19 +53,21 @@ class CommonContainer extends React.Component {
   }
 
   render() {
-      const { classes, history } = this.props
-      const { open } = this.state
-      
+    const { classes, history, authStore } = this.props
+    const { auth } = authStore
+    const { open } = this.state
     return (
       <>
-        <CAppBar>
+          <CAppBar>
           <CToolbar className={classes.toolbar}>
             <div style={{display:'flex'}}>
-              <IconButton onClick={() => history.push('/')} className={classes.logoButton}>
+              <IconButton onClick={() => history.push('/photo')} className={classes.logoButton}>
               <LogoIcon/>
               </IconButton>
               {!isMobile && <CTypography>PHOTO BOOK</CTypography>}
             </div>
+
+            {auth.isAuth && 
             <div style={{display:'flex'}}>
               <IconButton onClick={() => this.open()} className={classes.iconButton}>
                 <TodayIcon className={classes.icon} />
@@ -70,16 +75,17 @@ class CommonContainer extends React.Component {
               <IconButton onClick={() => history.push('/filter')} className={classes.iconButton}>
                 <FilterListIcon className={classes.icon} />
               </IconButton>
-            </div>
+            </div>}
           </CToolbar>
-        </CAppBar>
+        </CAppBar> 
 
         <CustomCalendar open = {open} handleClose={this.close} />
 
         <Router history={history}>
           <Suspense fallback={<div style={{background: "transparent"}} />}>
             <Switch>
-            <Route exact path={'/'} component={() => <PhotoBookContainer/>} />
+            <Route exact path={'/'} component={() => <SignInContainer/>} />
+            <Route exact path={'/photo'} component={() => <PhotoBookContainer/>} />
             <Route exact path={'/filter'} component={() => <FilterContainer/>} />
             </Switch>
           </Suspense>
