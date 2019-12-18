@@ -3,15 +3,16 @@ import { Router, Switch, Route } from "react-router-dom"
 import { IconButton } from '@material-ui/core'
 import { CAppBar, CToolbar, CTypography } from './styled'
 import { withStyles } from '@material-ui/core/styles'
-import TodayIcon from '@material-ui/icons/Today';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import {LogoIcon} from '../Components/DigilogLogo'
 import { isMobile } from 'mobile-device-detect';
-import CustomCalendar from '../Components/CustomCalendar'
 import { inject, observer } from 'mobx-react'
+// import RefreshIcon from '@material-ui/icons/Refresh';
+// import TodayIcon from '@material-ui/icons/Today';
+// import FilterListIcon from '@material-ui/icons/FilterList';
+// import CustomCalendar from '../Components/CustomCalendar'
 
+//const FilterContainer = lazy(() => import("./FilterContainer"));
 const PhotoBookContainer = lazy(() => import("./PhotoBookContainer"));
-const FilterContainer = lazy(() => import("./FilterContainer"));
 const SignInContainer = lazy(() => import("./SignInContainer"));
 
 const customStyle = theme => ({
@@ -24,18 +25,18 @@ const customStyle = theme => ({
         height: 50,
         padding : 0
     },
+    icon : {
+      width: 30,
+      height: 30,
+    },
     logoButton : {
       width: 130,
       height: 65,
       padding : 0
     },
-    icon : {
-        width: 30,
-        height: 30,
-    },
 })
 
-@inject('authStore')
+@inject('authStore', 'filterStore')
 @observer
 class CommonContainer extends React.Component {
 
@@ -53,40 +54,38 @@ class CommonContainer extends React.Component {
   }
 
   render() {
-    const { classes, history, authStore } = this.props
-    const { auth } = authStore
-    const { open } = this.state
+    const { classes, history, authStore, filterStore } = this.props
+    const { filter } = filterStore
+    console.log(filter.startDate, filter.endDate)
     return (
       <>
           <CAppBar>
           <CToolbar className={classes.toolbar}>
             <div style={{display:'flex'}}>
-              <IconButton onClick={() => history.push('/photo')} className={classes.logoButton}>
+              <div className={classes.logoButton}>
               <LogoIcon/>
-              </IconButton>
+              </div>
               {!isMobile && <CTypography>PHOTO BOOK</CTypography>}
             </div>
 
-            {auth.isAuth && 
+            {/* {auth.isAuth && 
             <div style={{display:'flex'}}>
               <IconButton onClick={() => this.open()} className={classes.iconButton}>
-                <TodayIcon className={classes.icon} />
+                <RefreshIcon className={classes.icon} />
               </IconButton>
               <IconButton onClick={() => history.push('/filter')} className={classes.iconButton}>
                 <FilterListIcon className={classes.icon} />
               </IconButton>
-            </div>}
+            </div>} */}
           </CToolbar>
         </CAppBar> 
-
-        <CustomCalendar open = {open} handleClose={this.close} />
-
+        {/* <CustomCalendar open = {open} handleClose={this.close} /> */}
+        
         <Router history={history}>
           <Suspense fallback={<div style={{background: "transparent"}} />}>
             <Switch>
             <Route exact path={'/'} component={() => <SignInContainer/>} />
             <Route exact path={'/photo'} component={() => <PhotoBookContainer/>} />
-            <Route exact path={'/filter'} component={() => <FilterContainer/>} />
             </Switch>
           </Suspense>
         </Router>

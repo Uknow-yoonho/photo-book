@@ -6,28 +6,38 @@ import { withStyles } from '@material-ui/core/styles'
 import { CAppBar, CToolbar } from '../Containers/styled'
 import { inject, observer } from 'mobx-react'
 import { isMobile } from 'mobile-device-detect';
+import moment from 'moment-timezone'
 
 const customStyle = theme => ({
   root: {
     display:'flex', justifyContent:'center'
   },
   feed : {
-    margin: 15, 
+    marginTop: 0, 
+    marginBottom: 50,
     width: isMobile? '100vw' : 640
   },
   img: {
-    height : isMobile? '50vh' : '70vh' , 
+    height : isMobile? '50vh' : 480 , 
     width: isMobile? '100vw' : 640,
   },
   toolbar: {
     border : 'solid 0.5px #aeaeae',
     display: 'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
+  },
+  cameraName : {
+    color: '#000000',
+    fontSize : 20,
+  },
+  imgDate : {
+    color: '#aeaeae',
+    fontSize : 16,
   }
 })
 
 
-@inject('imageStore', 'bookStore')
+@inject('imageStore', 'bookStore', 'filterStore')
 @observer
 class PhotoFeed extends React.Component {
 
@@ -43,14 +53,20 @@ class PhotoFeed extends React.Component {
   }
   
   render() {
-    const { classes, imageData, activeStep, idx } = this.props
-    //console.log(imageData.viewImages)
+    const { classes, imageData,
+      filterStore, activeStep, idx } = this.props
+    const { filter } = filterStore
     return (
       <div className={classes.root}>
       <div className={classes.feed}>
         <CAppBar height="50px">
           <CToolbar className={classes.toolbar} height="50px" >
-            <Typography style={{color:'black'}}>인스타 피드 따라하기</Typography>
+          <Typography className={classes.cameraName}>{filter.cameraNames[idx]}</Typography>
+            <Typography className={classes.imgDate}>
+            {Array.isArray(imageData.createdAtFile) &&
+              moment(Number.parseInt(imageData.createdAtFile[activeStep[idx]]))
+              .tz("Europe/Amsterdam").format("YYYY/MM/DD hh:mm:ss A")
+              }</Typography>
           </CToolbar>
         </CAppBar>
        
@@ -83,10 +99,10 @@ class PhotoFeed extends React.Component {
         }
       
         <CAppBar height="50px">
-          <CToolbar className={classes.toolbar} height="50px" >
+          <CToolbar className={classes.toolbar} style={{justifyContent: 'center'}} height="50px" >
             <a href={Array.isArray(imageData.downImages)?imageData.downImages[activeStep[idx]]:null}>
               <IconButton style= {{padding: 0, width: 50, height: 50}}>
-              <GetAppIcon /></IconButton>
+              <GetAppIcon style= {{color: "#aeaeae"}}/></IconButton>
             </a>
           </CToolbar>
         </CAppBar>

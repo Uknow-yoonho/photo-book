@@ -10,16 +10,17 @@ export class FilterStore {
   constructor() {
     this.filter = {
       date : moment(new Date()).valueOf(),
+      startDate : moment(new Date()).valueOf(),
+      endDate : moment(new Date()).valueOf(),
       dispCam : [true,true,true,true,true],
       cameraNames : ["PTZ1","PTZ2","PTZ3","PTZ4","WIDE1"],
-      datePeriod : 1
     }
   }
 
   @action
-  async getImageDatas(cameraNames, date) {
+  async getImageDatas(cameraNames, startDate, endDate) {
     try{
-      return await FilterService.getImageDatas(cameraNames, date)
+      return await FilterService.getImageDatas(cameraNames, startDate, endDate)
     }catch(e){
         throw e;
     }

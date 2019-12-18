@@ -8,7 +8,7 @@ export class AuthStore {
   constructor() {
     this.auth = {
       isAuth : false,
-      password : '1324'
+      password : '1234'
     }
   }
 

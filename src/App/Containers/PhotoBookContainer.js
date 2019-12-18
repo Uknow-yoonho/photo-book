@@ -13,7 +13,7 @@ const customStyle = theme => ({
   },
   info : {
     textAlign: 'center',
-    padding: 5,
+    padding: 15,
   }
 })
 
@@ -29,13 +29,14 @@ class PhotoBookContainer extends React.Component {
   }
 
   getImageDatas = () => {
-    const { filterStore, imageStore } = this.props
+    const { filterStore, imageStore, bookStore } = this.props
     const { filter } = filterStore
     filter.dispCam.map((cam, idx) => {
       filterStore.getImageDatas(
-        filter.cameraNames[idx], filter.date
+        filter.cameraNames[idx], filter.startDate, filter.endDate
         )
       .then((res) => {
+        bookStore.book.currentPage = [0,0,0,0,0]
         imageStore.parseImageData(res, idx)
       })
       .catch((err) => {
@@ -62,16 +63,16 @@ class PhotoBookContainer extends React.Component {
         <div className={classes.info}>
           <Info />
         </div>
-        {filter.dispCam[0] && 
-        <PhotoFeed imageData={image.image1} activeStep={activeStep} idx={0} />}
-        {filter.dispCam[1] && 
-        <PhotoFeed imageData={image.image2} activeStep={activeStep} idx={1} />}
-        {filter.dispCam[2] && 
-        <PhotoFeed imageData={image.image3} activeStep={activeStep} idx={2} />}
-        {filter.dispCam[3] && 
-        <PhotoFeed imageData={image.image4} activeStep={activeStep} idx={3} />}
-        {filter.dispCam[4] && 
-        <PhotoFeed imageData={image.image5} activeStep={activeStep} idx={4} />}
+          {Array.isArray(image.image1.viewImages) && (image.image1.viewImages.length != 0 ?
+          filter.dispCam[0] && <PhotoFeed imageData={image.image1} activeStep={activeStep} idx={0} /> : <></>)}
+          {Array.isArray(image.image2.viewImages) && (image.image2.viewImages.length != 0 ?
+          filter.dispCam[1] && <PhotoFeed imageData={image.image2} activeStep={activeStep} idx={1} /> : <></>)}
+          {Array.isArray(image.image3.viewImages) && (image.image3.viewImages.length != 0 ?
+          filter.dispCam[2] && <PhotoFeed imageData={image.image3} activeStep={activeStep} idx={2} /> : <></>)}
+          {Array.isArray(image.image4.viewImages) && (image.image4.viewImages.length != 0 ?
+          filter.dispCam[3] && <PhotoFeed imageData={image.image4} activeStep={activeStep} idx={3} /> : <></>)}
+          {Array.isArray(image.image5.viewImages) && (image.image5.viewImages.length != 0 ?
+          filter.dispCam[4] && <PhotoFeed imageData={image.image5} activeStep={activeStep} idx={4} /> : <></>)}
         <div style={{height:150}}/>
       </PBContainer>
     )

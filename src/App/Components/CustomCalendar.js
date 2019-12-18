@@ -7,35 +7,65 @@ import {
   DatePicker
 } from '@material-ui/pickers';
 import { inject, observer } from 'mobx-react'
-import { Dialog } from '@material-ui/core'
-import moment from 'moment'
+import { Dialog, createMuiTheme } from '@material-ui/core'
+import { ThemeProvider } from "@material-ui/styles";
+import deepOrange from "@material-ui/core/colors/deepOrange";
+
+const defaultMaterialTheme = createMuiTheme({
+  palette: {
+    primary:{
+      main: deepOrange[500],
+    }
+  },
+});
+
 
 @inject('filterStore')
 @observer
 class CustomCalendar extends React.Component {
+  constructor(props){
+    super(props)
+    this.handleClose=this.handleClose.bind(this)
+  }
 
-  handleDateChange = (date) => {
+  handleStartDateChange = (date) => {
     //console.log(date)
     const { filterStore } = this.props
-    filterStore.filter.date = date
+    filterStore.filter.startDate = date
+    this.props.handleClose()
+  }
+
+  handleEndDateChange = (date) => {
+    //console.log(date)
+    const { filterStore } = this.props
+    filterStore.filter.endDate = date
+    this.props.handleClose()
+  }
+
+  handleClose() {
+    console.log("??")
     this.props.handleClose()
   }
 
   render() {
-    const { filterStore, open } = this.props
+    const { filterStore, open, isStart } = this.props
     const { filter } = filterStore
     return (
       <>
-        <Dialog open = {open} >
+      <ThemeProvider theme={defaultMaterialTheme}>
+        <Dialog open = {open} onClose = {this.handleClose}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <DatePicker
               variant="static"
               openTo="date"
-              value={filter.date}
-              onChange={(date) => this.handleDateChange(date)}
+              value={isStart ? filter.startDate : filter.endDate}
+              onChange={
+              (date) => isStart ?  this.handleStartDateChange(date) :
+              this.handleEndDateChange(date)}
             />
           </MuiPickersUtilsProvider>
         </Dialog>
+      </ThemeProvider>
       </>
     )
   }

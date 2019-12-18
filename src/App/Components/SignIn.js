@@ -1,14 +1,18 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'  
 import { TextField, FormControl, 
-  Button, Avatar, Dialog, Typography } from '@material-ui/core'
+  Button, Avatar, Dialog, Typography, createMuiTheme } from '@material-ui/core'
 import { isMobile } from 'mobile-device-detect';
 import { inject, observer } from 'mobx-react'
+import { ThemeProvider } from "@material-ui/styles";
+
+const theme =  createMuiTheme({
+});
 
 const customStyle = theme => ({
   root: {
     height: '100vh',
-    paddingTop : '20vh',
+    paddingTop : '15vh',
   },
   avatarContainer: {
     display: 'flex',
@@ -25,13 +29,25 @@ const customStyle = theme => ({
     width : isMobile? '70vw':'30vw',
   },
   formcontrol : {
-    width : '100%'
+    width : '100%',
+    marginTop : 15,
   },
   button : {
     width : '100%',
-    marginTop : 10, color: 'white',
+    marginTop : 20, color: 'white',
     backgroundColor: 'tomato',
-  }
+  },
+  underline: {
+    '&:before': {
+      borderBottomColor: '#eaeaea',
+    },
+    '&:after': {
+      borderBottomColor: 'tomato',
+    },
+    '&:hover:before': {
+      borderBottomColor: ['#aeaeae', '!important'],
+    },
+  },
 })
 
 const imagePath = process.env.PUBLIC_URL + '/assets/';
@@ -73,10 +89,13 @@ class SignIn extends React.Component{
         <div className={classes.formContainer}>
           <div className={classes.form}> 
             <FormControl className={classes.formcontrol}>
+            <ThemeProvider theme={theme}>
               <TextField type="password"
                 placeholder="PASSWORD" 
                 onChange={this.handleChange}
+                InputProps={{classes: {underline: classes.underline}}}
               />
+            </ThemeProvider>
             </FormControl>
             <Button onClick={this.handleSubmit} 
             className={classes.button}>LOGIN</Button>
