@@ -24,27 +24,6 @@ class PhotoBookContainer extends React.Component {
   constructor(props) {
     super(props)
   }
-  componentDidMount() {
-    this.getImageDatas()
-  }
-
-  getImageDatas = () => {
-    const { filterStore, imageStore, bookStore } = this.props
-    const { filter } = filterStore
-    filter.dispCam.map((cam, idx) => {
-      filterStore.getImageDatas(
-        filter.cameraNames[idx], filter.startDate, filter.endDate
-        )
-      .then((res) => {
-        bookStore.book.currentPage = [0,0,0,0,0]
-        imageStore.parseImageData(res, idx)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-    })
-  }
-
 
   render() {
     const { filterStore, imageStore, classes, bookStore } = this.props
@@ -53,10 +32,6 @@ class PhotoBookContainer extends React.Component {
     const activeStep = bookStore.book.currentPage
     const { authStore } = this.props
     const { auth } = authStore
-
-    if (!auth.isAuth) { 
-      return <Redirect to={'/'} />;
-    }
 
     return (
       <PBContainer className={classes.root}>

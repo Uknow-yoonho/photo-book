@@ -20,25 +20,42 @@ const defaultMaterialTheme = createMuiTheme({
 });
 
 
-@inject('filterStore')
+@inject('filterStore', 'imageStore', 'bookStore')
 @observer
 class CustomCalendar extends React.Component {
   constructor(props){
     super(props)
     this.handleClose=this.handleClose.bind(this)
   }
+  
+  getImageDatas = () => {
+    const { filterStore, imageStore, bookStore } = this.props
+    const { filter } = filterStore
+    filter.dispCam.map((cam, idx) => {
+      filterStore.getImageDatas(
+        filter.cameraNames[idx], filter.startDate, filter.endDate
+        )
+      .then((res) => {
+        bookStore.book.currentPage = [0,0,0,0,0]
+        imageStore.parseImageData(res, idx)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+    })
+  }
 
   handleStartDateChange = (date) => {
-    //console.log(date)
     const { filterStore } = this.props
     filterStore.filter.startDate = date
+    this.getImageDatas()
     this.props.handleClose()
   }
 
   handleEndDateChange = (date) => {
-    //console.log(date)
     const { filterStore } = this.props
     filterStore.filter.endDate = date
+    this.getImageDatas()
     this.props.handleClose()
   }
 

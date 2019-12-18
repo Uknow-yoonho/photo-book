@@ -14,9 +14,9 @@ class SignInContainer extends React.Component {
     const { authStore } = this.props
     const { auth } = authStore
 
-    if (auth.isAuth) { 
-      return <Redirect to={'/photo'} />;
-    }
+    // if (auth.isAuth) { 
+    //   return <Redirect to={'/photo'} />;
+    // }
 
     return (
       <>

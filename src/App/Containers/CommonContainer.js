@@ -6,14 +6,16 @@ import { withStyles } from '@material-ui/core/styles'
 import {LogoIcon} from '../Components/DigilogLogo'
 import { isMobile } from 'mobile-device-detect';
 import { inject, observer } from 'mobx-react'
+import PhotoBookContainer from './PhotoBookContainer'
+import SignInContainer from './SignInContainer'
 // import RefreshIcon from '@material-ui/icons/Refresh';
 // import TodayIcon from '@material-ui/icons/Today';
 // import FilterListIcon from '@material-ui/icons/FilterList';
 // import CustomCalendar from '../Components/CustomCalendar'
 
 //const FilterContainer = lazy(() => import("./FilterContainer"));
-const PhotoBookContainer = lazy(() => import("./PhotoBookContainer"));
-const SignInContainer = lazy(() => import("./SignInContainer"));
+// const PhotoBookContainer = lazy(() => import("./PhotoBookContainer"));
+// const SignInContainer = lazy(() => import("./SignInContainer"));
 
 const customStyle = theme => ({
     toolbar : {
@@ -36,7 +38,7 @@ const customStyle = theme => ({
     },
 })
 
-@inject('authStore', 'filterStore')
+@inject('authStore', 'filterStore', 'bookStore', 'imageStore')
 @observer
 class CommonContainer extends React.Component {
 
@@ -53,10 +55,31 @@ class CommonContainer extends React.Component {
     this.setState({open: false})
   }
 
+  componentDidMount() {
+    this.getImageDatas()
+  }
+
+  getImageDatas = () => {
+    const { filterStore, imageStore, bookStore } = this.props
+    const { filter } = filterStore
+    filter.dispCam.map((cam, idx) => {
+      filterStore.getImageDatas(
+        filter.cameraNames[idx], filter.startDate, filter.endDate
+        )
+      .then((res) => {
+        bookStore.book.currentPage = [0,0,0,0,0]
+        imageStore.parseImageData(res, idx)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+    })
+  }
+
   render() {
     const { classes, history, authStore, filterStore } = this.props
     const { filter } = filterStore
-    console.log(filter.startDate, filter.endDate)
+    const { auth } = authStore
     return (
       <>
           <CAppBar>
@@ -80,15 +103,16 @@ class CommonContainer extends React.Component {
           </CToolbar>
         </CAppBar> 
         {/* <CustomCalendar open = {open} handleClose={this.close} /> */}
-        
-        <Router history={history}>
+        {auth.isAuth &&  <PhotoBookContainer/>}
+        {!auth.isAuth && <SignInContainer/>}
+        {/* <Router history={history}>
           <Suspense fallback={<div style={{background: "transparent"}} />}>
             <Switch>
             <Route exact path={'/'} component={() => <SignInContainer/>} />
             <Route exact path={'/photo'} component={() => <PhotoBookContainer/>} />
             </Switch>
           </Suspense>
-        </Router>
+        </Router> */}
       </>
     )
   }

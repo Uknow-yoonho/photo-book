@@ -60,7 +60,7 @@ const customStyle = theme => ({
   }
 })
 
-@inject('filterStore')
+@inject('filterStore', 'imageStore', 'bookStore')
 @observer
 class Info extends React.Component {
 
@@ -71,6 +71,7 @@ class Info extends React.Component {
       isStart : false
     }
   }
+  
   open = (isStart) => {
     isStart ? this.setState({open: true, isStart: true}) :
     this.setState({open: true, isStart: false})
