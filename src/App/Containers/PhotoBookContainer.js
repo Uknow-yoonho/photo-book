@@ -48,7 +48,7 @@ class PhotoBookContainer extends React.Component {
           filter.dispCam[3] && <PhotoFeed imageData={image.image4} activeStep={activeStep} idx={3} /> : <></>)}
           {Array.isArray(image.image5.viewImages) && (image.image5.viewImages.length != 0 ?
           filter.dispCam[4] && <PhotoFeed imageData={image.image5} activeStep={activeStep} idx={4} /> : <></>)}
-        <div style={{height:150}}/>
+        <div style={{height:120}}/>
       </PBContainer>
     )
   }

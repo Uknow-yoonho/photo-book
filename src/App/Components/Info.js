@@ -11,7 +11,7 @@ import CustomCalendar from '../Components/CustomCalendar'
 const customStyle = theme => ({
   camera : {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   date : {
     fontSize : 18,
@@ -24,23 +24,23 @@ const customStyle = theme => ({
   button : {
     color : '#AEAEAE',
     backgroundColor: '#EAEAEA',
-    margin : 10, 
-    marginLeft: 0, width: isMobile? 60:100, fontSize: isMobile? 15:20,
+    margin : 8, 
+    marginLeft: 0, width: isMobile? 52:100, fontSize: isMobile? 13:20,
     borderRadius : 20,
     height : 35,
     "&.Mui-selected" : {
       color : 'white',
       backgroundColor: 'tomato',
-      margin : 10, 
-      marginLeft: 0, width: isMobile? 60:100, fontSize: isMobile? 15:20,
+      margin : 8, 
+      marginLeft: 0, width: isMobile? 52:100, fontSize: isMobile? 13:20,
       borderRadius : 20,
       height : 35,
     },
     "&.Mui-selected:hover" : {
       color : 'white',
       backgroundColor: 'tomato',
-      margin : 10, 
-      marginLeft: 0, width: isMobile? 60:100, fontSize: isMobile? 15:20,
+      margin : 8, 
+      marginLeft: 0, width: isMobile? 52:100, fontSize: isMobile? 13:20,
       borderRadius : 20,
       height : 35,
     }
@@ -55,7 +55,9 @@ const customStyle = theme => ({
     height: 30,
   },
   datepicker : {
-    display:'flex', justifyContent: isMobile ? 'space-between' : 'center',
+    width: 'inherit',
+    display:'flex', 
+    justifyContent: 'space-between',
     margin : 5
   }
 })
@@ -71,7 +73,7 @@ class Info extends React.Component {
       isStart : false
     }
   }
-  
+
   open = (isStart) => {
     isStart ? this.setState({open: true, isStart: true}) :
     this.setState({open: true, isStart: false})
@@ -98,7 +100,7 @@ class Info extends React.Component {
     const { filter } = filterStore
     const { open, isStart } = this.state
     return (
-      <>
+      <div style={{display: 'inline-block', width: isMobile? '90vw' : 640}}>
         <div className={classes.camera}>
           {filter.dispCam.map((cam, idx) => 
             <ToggleButton selected={filter.dispCam[idx]}
@@ -123,7 +125,7 @@ class Info extends React.Component {
         </div>
 
         <CustomCalendar isStart= {isStart} open = {open} handleClose={this.close} />
-      </>
+      </div>
     )
   }
 }
