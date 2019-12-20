@@ -18,7 +18,11 @@ const customStyle = theme => ({
     width: isMobile? '100vw' : 640
   },
   img: {
-    height : isMobile? '50vh' : 480 , 
+    height : isMobile? '75vh' : 640 / 1.33, 
+    width: isMobile? '100vw' : 640,
+  },
+  imgWide: {
+    height : isMobile? '56vh' : 640 / 1.78, 
     width: isMobile? '100vw' : 640,
   },
   toolbar: {
@@ -73,7 +77,7 @@ class PhotoFeed extends React.Component {
         {Array.isArray(imageData.viewImages) &&
           <>
             <img
-              className={classes.img}
+              className={idx==4?classes.imgWide : classes.img}
               src={imageData.viewImages[activeStep[idx]]}
             />
             <MobileStepper
