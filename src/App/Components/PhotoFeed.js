@@ -18,11 +18,11 @@ const customStyle = theme => ({
     width: isMobile? '100vw' : 640
   },
   img: {
-    height : isMobile? '75vh' : 640 / 1.33, 
+    height : isMobile? '75vw' : (640 / 1.33), 
     width: isMobile? '100vw' : 640,
   },
   imgWide: {
-    height : isMobile? '56vh' : 640 / 1.78, 
+    height : isMobile? '56vw' : (640 / 1.78), 
     width: isMobile? '100vw' : 640,
   },
   toolbar: {
